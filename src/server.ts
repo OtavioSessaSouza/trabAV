@@ -7,97 +7,28 @@ const PORT = 3000;
 
 // 1. Livros:
 //POST /livros : Adiciona um novo livro.
-app.post("/livros", (req: Request, res: Response) => {
-  livrosController
-    .criar(req.body)
-    .then((result: any) => res.json(result))
-    .catch((error: any) => {
-      res.status(400).json({ message: error.message });
-    });
-});
+app.post("/livros",livrosController.criar);
 //GET /livros : Lista todos os livros.
-app.get("/livros", (req: Request, res: Response) => {
-  livrosController
-    .listarTodos()
-    .then((result: any) => res.json(result))
-    .catch((error: any) => {
-      res.status(400).json({ message: error.message });
-    });
-});
+app.get("/livros",livrosController.listarTodos);
 //GET /livros/:id : Busca um livro pelo ID.
-app.get("/livros/:id", (req: Request, res: Response) => {
-  livrosController
-    .listarUm(req.params.id)
-    .then((result: any) => res.json(result))
-    .catch((error: any) => {
-      res.status(400).json({ message: error.message });
-    });
-});
+app.get("/livros/:id", livrosController.listarUm);
 //PUT /livros/:id : Atualiza um livro pelo ID.
-app.put("/livros/:id", (req: Request, res: Response) => {
-  livrosController
-    .editar(req.params.id, req.body)
-    .then((result: any) => res.json(result))
-    .catch((error: any) => {
-      res.status(400).json({ message: error.message });
-    });
-});
+app.put("/livros/:id", livrosController.editar);
 //DELETE /livros/:id : Deleta um livro pelo ID.
-app.delete("/livros/:id", (req: Request, res: Response) => {
-  livrosController
-    .deletar(req.params.id)
-    .then((result: any) => res.json(result))
-    .catch((error: any) => {
-      res.status(400).json({ message: error.message });
-    });
-});
+app.delete("/livros/:id", livrosController.deletar);
 //GET /autores/:autorId/livros : Lista todos os livros de um autor específico.
-app.get("/autores/:autorId/livros", (req: Request, res: Response) => {
-  livrosController
-    .listarLivrosAutor(req.params.autorId)
-    .then((result: any) => res.json(result))
-    .catch((error: any) => {
-      res.status(400).json({ message: error.message });
-    });
-});
+app.get("/autores/:autorId/livros", livrosController.listarLivrosAutor);
 //2. Autores:
 //POST /autores : Adiciona um novo autor.
-app.post("/autores", (req: Request, res: Response) => {
-  autoresController
-    .criar(req.body)
-    .then((result: any) => res.json(result))
-    .catch((error: any) => {
-      res.status(400).json({ message: error.message });
-    });
-});
+app.post("/autores", autoresController.criar);
 //GET /autores : Lista todos os autores.
-app.get("/autores", (req: Request, res: Response) => {
-  autoresController
-    .listarTodos()
-    .then((result: any) => res.json(result))
-    .catch((error: any) => res.status(400).json(error));
-});
+app.get("/autores", autoresController.listarTodos);
 //GET /autores/:id : Busca um autor pelo ID.
-app.get("/autores/:id", (req: Request, res: Response) => {
-  autoresController
-    .listarUm(req.params.id)
-    .then((result: any) => res.json(result))
-    .catch((error: any) => res.status(400).json(error));
-});
+app.get("/autores/:id", autoresController.listarUm);
 //PUT /autores/:id : Atualiza um autor pelo ID.
-app.put("/autores/:id", (req: Request, res: Response) => {
-  autoresController
-    .editar(req.params.id, req.body)
-    .then((result: any) => res.json(result))
-    .catch((error: any) => res.status(400).json(error));
-});
+app.put("/autores/:id",autoresController.editar);
 //DELETE /autores/:id : Deleta um autor pelo ID.
-app.delete("/autores/:id", (req: Request, res: Response) => {
-  autoresController
-    .deletar(req.params.id)
-    .then((result: any) => res.json(result))
-    .catch((error: any) => res.status(400).json(error));
-});
+app.delete("/autores/:id", autoresController.deletar);
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta em http://localhost:${PORT}/ `);

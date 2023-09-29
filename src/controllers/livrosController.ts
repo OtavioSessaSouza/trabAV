@@ -1,42 +1,90 @@
+import { Request, Response } from "express";
 import { livrosSchema } from "./validationLivros";
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const livrosController = {
-  criar: async (data: any) => {
+  criar: async (req: Request, res: Response) => {
+    const {titulo,descricao,dataPublicacao,ISBN,preco,autorId} = req.body
     try {
-      await livrosSchema.validate(data);
-      return await prisma.livros.create({
-        data,
-      });
+      if(titulo.length <= 255){// @max(255)
+        await livrosSchema.validate({titulo,descricao,dataPublicacao,ISBN,preco,autorId});
+        const livros = await prisma.livros.create({
+          data:{titulo,descricao,dataPublicacao,ISBN,preco,autorId},
+        });
+        return res.json(livros)
+      }
+      else{
+        return res.json(("Titulo muito grande"));
+      }
     } catch (error) {
       if (error instanceof Error) {
-        throw new Error(error.message);
+        return res.json(Error(error.message));
       }
     }
   },
-  listarTodos: async () => {
-    return await prisma.livros.findMany();
+  listarTodos: async (req:Request, res:Response) => {
+    const livros = await prisma.livros.findMany();
+    try {
+      if(livros){
+        return res.json(livros);      
+      }
+    }catch (error) {
+      if (error instanceof Error) {
+        return res.json(Error(error.message));
+      }
+    }
+
   },
-  listarUm: async (id: string) => {
-    return await prisma.livros.findUnique({
-      where: { id: parseInt(id) },
-    });
+  listarUm: async (req:Request, res:Response) => {
+    const id = req.params.id
+    try {
+      return res.json(await prisma.livros.findUnique({
+        where: { id: parseInt(id) },
+      }));
+    }catch (error) {
+      if (error instanceof Error) {
+        return res.json(Error(error.message));
+      }
+    }
   },
-  listarLivrosAutor: async (autorId: string) => {
-    return await prisma.livros.findMany({
-      where: { autorId: parseInt(autorId) },
-    });
+  listarLivrosAutor: async (req:Request, res:Response) => {
+    const autorId = req.params.autorId
+    try {
+      return res.json(await prisma.livros.findMany({
+        where: { autorId: parseInt(autorId) },
+      }));
+    }catch (error) {
+      if (error instanceof Error) {
+        return res.json(Error(error.message));
+      }
+    }
   },
-  editar: async (id: string, data: any) => {
-    return await prisma.livros.update({
-      where: { id: parseInt(id) },
-      data,
-    });
+  editar: async (req:Request, res:Response) => {
+    const id = req.params.id
+    const data = req.body
+    try {
+      return res.json(await prisma.livros.update({
+        where: { id: parseInt(id) },
+        data,
+      }));
+    }catch (error) {
+      if (error instanceof Error) {
+        return res.json(Error(error.message));
+      }
+    }
+
   },
-  deletar: async (id: string) => {
-    return await prisma.livros.delete({
-      where: { id: parseInt(id) },
-    });
+  deletar: async (req:Request, res:Response) => {
+    const id = req.params.id
+    try {
+      return res.json(await prisma.livros.delete({
+        where: { id: parseInt(id) },
+      }));
+    }catch (error) {
+      if (error instanceof Error) {
+        return res.json(Error(error.message));
+      }
+    }
   },
 };
 export default livrosController;

@@ -12,15 +12,15 @@ url = "file:./dev.db"
 
 model Autores {
 id Int @id @default(autoincrement())
-nome String
+nome String 
 nascimento String
-biografia String
+biografia String ?
 nacionalidade String
 }
 
 model Livros{
 id Int @id @default(autoincrement())
-titulo String
+titulo String 
 descricao String
 dataPublicacao String
 ISBN String @unique
